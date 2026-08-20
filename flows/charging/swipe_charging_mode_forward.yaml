@@ -1,0 +1,10 @@
+appId: by.batteryfly.ev_charging.dev
+---
+- swipe:
+    start: 85%, 35% 
+    end: 15%, 35%
+    duration: 600
+- extendedWaitUntil:
+    visible: "Ждем одну минуту..."
+    timeout: 800
+    optional: true

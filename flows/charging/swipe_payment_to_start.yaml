@@ -1,0 +1,24 @@
+# swipe_payment_to_start.yaml
+appId: by.batteryfly.ev_charging.dev
+---
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%      
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%   
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%   
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%   
+    duration: 400
+- swipe:
+    start: 15%, 65%
+    end: 85%, 65%   
+    duration: 400
+- extendedWaitUntil:
+    visible: "Ждем одну минуту..."
+    timeout: 400
+    optional: true

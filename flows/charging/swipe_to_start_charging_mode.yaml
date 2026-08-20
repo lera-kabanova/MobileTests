@@ -1,0 +1,16 @@
+#перемотка в начало меню режима зарядки
+appId: by.batteryfly.ev_charging.dev
+---
+- swipe:
+    start: 15%, 35%
+    end: 85%, 35%
+- swipe:
+    start: 15%, 35%
+    end: 85%, 35%
+- swipe:
+    start: 15%, 35%
+    end: 85%, 35%
+- swipe:
+    start: 15%, 35%
+    end: 85%, 35%
+    duration: 600

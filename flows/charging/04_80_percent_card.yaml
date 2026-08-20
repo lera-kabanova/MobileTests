@@ -1,0 +1,77 @@
+appId: by.batteryfly.ev_charging.dev
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+
+- runFlow:
+    file: swipe_to_start_charging_mode.yaml
+
+- assertVisible: ".*Full tank.*"
+
+- runFlow: 
+    file: swipe_charging_mode_forward.yaml
+
+- assertVisible: ".*Charge.*to.*80.*%.*"
+
+- runFlow:
+    file: swipe_payment_to_start.yaml
+
+# BLOCKED: assertVisible ".*My balance.*" removed here — no payment method in the
+# carousel currently contains the text "My balance" on this (corporate) test account.
+# See report — pending correct test account credentials from the team.
+
+- runFlow:
+    file: swipe_payment_forward.yaml
+
+- assertVisible: ".*0000.*"
+
+- tapOn:
+    text: "Next"
+- extendedWaitUntil:
+    visible: "Pay and charge"
+    timeout: 10000
+- tapOn:
+    text: "Pay and charge"
+
+- extendedWaitUntil:
+    visible: ".*40.*%"
+    timeout: 300000
+
+- extendedWaitUntil:
+    visible: ".*Stop.*"
+    timeout: 10000
+- tapOn:
+    text: ".*Stop.*"
+- extendedWaitUntil:
+    visible: ".*Yes.*"
+    timeout: 10000
+- tapOn:
+    text: ".*Yes.*"
+
+- extendedWaitUntil:
+    visible: "Ждем одну минуту..."
+    timeout: 60000
+    optional: true

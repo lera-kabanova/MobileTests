@@ -41,7 +41,7 @@ jobs:
             adb devices
 
             echo "Downloading APK..."
-            wget -O bf-stage.apk "ССЫЛКА_НА_BF-STAGE.APK"
+            wget -O bf-stage.apk "https://github.com/lera-kabanova/MobileTests/releases/download/v0.1/bf_stage.apk"
 
             echo "Installing APK..."
             adb install -r bf-stage.apk

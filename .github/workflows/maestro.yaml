@@ -46,5 +46,13 @@ jobs:
             echo "Installing APK..."
             adb install -r bf-stage.apk
 
-            echo "Installed packages:"
-            adb shell pm list packages | grep batteryfly
+            echo "Installing Maestro..."
+            curl -fsSL "https://get.maestro.mobile.dev" | bash
+
+            export PATH="$HOME/.maestro/bin:$PATH"
+
+            echo "Maestro version:"
+            maestro --version
+
+            echo "Running charging test..."
+            maestro test flows/charging/01_full_tank_balance.yaml

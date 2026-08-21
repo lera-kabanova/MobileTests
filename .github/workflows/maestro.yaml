@@ -23,7 +23,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Start Android Emulator
+     - name: Start Android Emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -35,4 +35,16 @@ jobs:
           emulator-port: 5554
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
-          script: adb devices
+
+          script: |
+            echo "Checking device..."
+            adb devices
+
+            echo "Downloading APK..."
+            wget -O bf-stage.apk "ССЫЛКА_НА_BF-STAGE.APK"
+
+            echo "Installing APK..."
+            adb install -r bf-stage.apk
+
+            echo "Installed packages:"
+            adb shell pm list packages | grep batteryfly

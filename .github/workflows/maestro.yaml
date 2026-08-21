@@ -49,10 +49,13 @@ jobs:
             echo "Installing Maestro..."
             curl -fsSL "https://get.maestro.mobile.dev" | bash
 
-            export PATH="$HOME/.maestro/bin:$PATH"
+            export PATH="/home/runner/.maestro/bin:$PATH"
 
+            echo "Checking Maestro binary..."
+            ls -la /home/runner/.maestro/bin
+            
             echo "Maestro version:"
-            maestro --version
+            /home/runner/.maestro/bin/maestro --version
 
             echo "Running charging test..."
-            maestro test flows/charging/01_full_tank_balance.yaml
+            /home/runner/.maestro/bin/maestro test flows/charging/01_full_tank_balance.yaml

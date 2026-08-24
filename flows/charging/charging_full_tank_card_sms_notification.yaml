@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 35
+# Scenario: Полный бак с карты. После завершения зарядки получаем SMS
+# Notes: NOT the same as existing 02_full_tank_card.yaml (that one stops manually and does not wait for SMS). Needs SMS access/mock and a full auto-completed session.
+
+- launchApp

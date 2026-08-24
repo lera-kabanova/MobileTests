@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 14
+# Scenario: Геолокация на карте
+# Notes: Needs device/emulator location mocking.
+
+- launchApp

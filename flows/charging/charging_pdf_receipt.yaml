@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 40
+# Scenario: PDF чек
+# Notes: Needs a completed charging session; may need file-system/download verification.
+
+- launchApp

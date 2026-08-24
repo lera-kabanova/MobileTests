@@ -1,0 +1,39 @@
+appId: by.batteryfly.ev_charging.dev
+---
+- launchApp:
+    stopApp: true
+
+- tapOn: "lera\nWelcome"
+
+- tapOn: ".*My balance.*"
+
+- tapOn: "Add a card"
+
+- extendedWaitUntil:
+    visible: "Номер карты"
+    timeout: 60000
+
+- tapOn: "Номер карты"
+- inputText: "4200000000000000"
+- tapOn:
+    point: 0%,15%
+
+- tapOn:
+    point: 5%,66%
+
+- inputText: "12/30"
+- tapOn:
+    point: 0%,15%
+
+- tapOn:
+    point: 53%,66%
+
+- inputText: "123"
+- tapOn:
+    point: 0%,15%
+- tapOn: "Привязать карту"
+
+- tapOn:
+    point: 5%,78%
+
+- inputText: "asd asd"

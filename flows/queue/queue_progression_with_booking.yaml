@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 49
+# Scenario: 1-й пользователь — бронирование, потом зарядка, 2 пользователя в очереди — продвижение по очереди
+# Notes: Same multi-user/multi-device constraint as item 48.
+
+- launchApp

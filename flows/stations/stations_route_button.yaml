@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 19
+# Scenario: Функциональность кнопки "Проложить маршрут"
+# Notes: Likely opens external maps app/intent; note overlap with item 32 and item 46.
+
+- launchApp

@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 25
+# Scenario: Корректное отображение формы "Язык"
+# Notes: UI-only display check.
+
+- launchApp

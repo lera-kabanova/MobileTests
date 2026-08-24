@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 10
+# Scenario: Вход пользователя через Google account
+# Notes: Requires a real/test Google account; may need out-of-app OAuth screen handling.
+
+- launchApp

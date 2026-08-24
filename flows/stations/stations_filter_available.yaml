@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 18
+# Scenario: "Свободно" в фильтре на карте и в списке
+# Notes: Covers both map and list views in one file.
+
+- launchApp

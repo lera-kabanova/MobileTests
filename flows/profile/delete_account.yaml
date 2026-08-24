@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 30
+# Scenario: Функциональность кнопки "Удалить аккаунт"
+# Notes: Destructive/irreversible; must run only against a disposable test account.
+
+- launchApp

@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 2
+# Scenario: Регистрация пользователя через email
+# Notes: Needs a fresh/unused email as test data each run.
+
+- launchApp

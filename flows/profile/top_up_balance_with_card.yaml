@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 27
+# Scenario: Пополнить баланс, если карта привязана
+# Notes: Depends on a card already being linked (see add_card.yaml).
+
+- launchApp

@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 41
+# Scenario: Бронирование — станция #57 Минск, ул. Ваупшасова 84, CCS2 забронирована, начать зарядку в течение указанного времени
+# Notes: Hardcoded station/connector test data; timing-sensitive (must start charging within reservation window).
+
+- launchApp

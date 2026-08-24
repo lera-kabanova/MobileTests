@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 50
+# Scenario: Зарядка водителем с корпо-аккаунта — 1 kWh
+# Notes: Needs a dedicated corporate test account and a way to stop/assert at exactly 1 kWh.
+
+- launchApp

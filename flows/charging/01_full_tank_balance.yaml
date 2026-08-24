@@ -2,8 +2,8 @@ appId: by.batteryfly.ev_charging.dev
 ---
 # Полный бак с баланса. Ручная остановка
 
-- launchApp:
-    stopApp: true
+- runFlow:
+    file: ../auth/login.yaml
 - extendedWaitUntil:
     visible: ".*List.*"
     timeout: 30000
@@ -35,9 +35,6 @@ appId: by.batteryfly.ev_charging.dev
 - runFlow:
     file: swipe_payment_to_start.yaml
 
-# BLOCKED: assertVisible ".*My balance.*" removed here — no payment method in the
-# carousel currently contains the text "My balance" on this (corporate) test account.
-# See report — pending correct test account credentials from the team.
 
 - tapOn:
     text: "Next"

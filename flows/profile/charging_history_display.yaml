@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 21
+# Scenario: Корректное отображение формы "История заправок"
+# Notes: Needs an account with existing charging history records.
+
+- launchApp

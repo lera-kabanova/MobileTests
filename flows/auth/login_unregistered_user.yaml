@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 9
+# Scenario: Вход с незарегистрированным логином и любым паролем
+# Notes: Negative auth case. Independent, no auth precondition.
+
+- launchApp

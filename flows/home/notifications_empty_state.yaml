@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 12b
+# Scenario: Функциональность кнопки "Уведомления" — пустой грид
+# Notes: Split from source item 12. Needs an account/state with zero notifications.
+
+- launchApp

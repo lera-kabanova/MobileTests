@@ -1,0 +1,8 @@
+appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 6
+# Scenario: Ссылки на пользовательские соглашения
+# Notes: UI-only, likely opens external links/WebView.
+
+- launchApp

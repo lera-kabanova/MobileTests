@@ -1,0 +1,42 @@
+
+appId: by.batteryfly.ev_charging.dev
+---
+
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    stopApp: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+
+- tapOn:
+    id: "username"
+- back
+- tapOn:
+    id: "username"
+- inputText: "${EMAIL}"
+
+
+- hideKeyboard
+- tapOn:
+    id: "password"
+- inputText: "${PASSWORD}"
+
+- hideKeyboard
+
+- tapOn:
+    text: "Login"
+    index: 1
+
+- assertVisible: "lera\nWelcome"

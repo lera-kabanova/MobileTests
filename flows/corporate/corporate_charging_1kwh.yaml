@@ -1,8 +1,97 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 50
-# Scenario: Зарядка водителем с корпо-аккаунта — 1 kWh
-# Notes: Needs a dedicated corporate test account and a way to stop/assert at exactly 1 kWh.
+# Зарядка водителем с корпоративного аккаунта
 
-- launchApp
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+
+- tapOn:
+    id: "username"
+- back
+- tapOn:
+    id: "username"
+- inputText: "${CORPORATE_TEST_EMAIL}"
+
+
+- hideKeyboard
+- tapOn:
+    id: "password"
+- inputText: "${CORPORATE_PASSWORD}"
+
+- hideKeyboard
+
+- tapOn:
+    text: "Login"
+    index: 1
+
+- assertVisible: "Иванов Иван Иванович\nWelcome"
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- tapOn:
+    text: ".*List.*"
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
+
+- runFlow:
+    file: ../charging/swipe_to_start_charging_mode.yaml
+- assertVisible: ".*Full tank.*"
+
+- runFlow:
+    file: ../charging/swipe_payment_to_start.yaml
+
+- assertVisible: ".*Частное.*предприятие.*"
+
+- tapOn:
+    text: "Next"
+- extendedWaitUntil:
+    visible: "Pay and charge"
+    timeout: 10000
+- tapOn:
+    text: "Pay and charge"
+- assertNotVisible: "Pay and charge"
+
+- extendedWaitUntil:
+    visible: ".*40.*%"
+    timeout: 300000
+
+- extendedWaitUntil:
+    visible: ".*Stop.*"
+    timeout: 10000
+- tapOn:
+    text: ".*Stop.*"
+- extendedWaitUntil:
+    visible: ".*Yes.*"
+    timeout: 10000
+- tapOn:
+    text: ".*Yes.*"
+- assertNotVisible: ".*Stop.*"
+
+- extendedWaitUntil:
+    visible: 'Completed in \d{1,2}:\d{2}'
+    timeout: 60000

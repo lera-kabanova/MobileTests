@@ -1,8 +1,78 @@
+# Возможность бронирования при балансе > 0 
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 42
-# Scenario: Возможность бронирования при условии, что хотя бы один баланс больше нуля
-# Notes: Needs controlled account balance/card state (zero vs positive) to test the condition both ways.
+- runFlow:
+    file: ../charging/setup_short_charging_session.yaml
 
-- launchApp
+- extendedWaitUntil:
+    visible: "lera\nWelcome"
+    timeout: 120000
+- tapOn: "lera\nWelcome"
+- tapOn: ".*My balance.*"
+
+- copyTextFrom:
+    text: '\d+\.\d{2} BYN'
+- evalScript: ${output.balance = parseFloat(maestro.copiedText.match(/[\d.]+/)[0])}
+- assertTrue:
+    condition: ${output.balance > 0}
+    label: "balance=${output.balance}"
+
+- tapOn: "Back"
+- tapOn: "Back"
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
+
+- runFlow:
+    file: ../charging/swipe_to_start_charging_mode.yaml
+- assertVisible: ".*Full tank.*"
+
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- assertVisible: ".*Book.*"
+
+- tapOn:
+    text: "Next"
+
+- assertVisible: "Booking"
+- assertVisible: "Mode"
+- assertVisible:
+    text: "Booking"
+    index: 1
+
+- tapOn: "Activate"
+
+- assertVisible: "\\d{1,2}:\\d{2}\nBooked"
+
+- tapOn: "\\d{1,2}:\\d{2}\nBooked"
+- tapOn: "Cancel"
+- tapOn: "Cancel booking"
+- assertNotVisible: "\\d{1,2}:\\d{2}\nBooked"

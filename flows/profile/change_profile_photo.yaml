@@ -1,8 +1,16 @@
+# Сменить фото
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 28
-# Scenario: Сменить фото
-# Notes: May require gallery/camera permission handling.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: "lera\nWelcome"
+
+- tapOn:
+    point: 13%,20%
+
+- tapOn: "Change photo"
+
+

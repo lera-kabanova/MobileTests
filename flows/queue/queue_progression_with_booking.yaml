@@ -1,8 +1,243 @@
+# Продвижение очереди
+
+#  0. Precondition: у ОБОИХ аккаунтов должна быть возможность забронировать/встать в очередь —
+#     короткая зарядная сессия перед основным сценарием (правило "нельзя бронировать повторно
+#     без завершённой зарядки"). Делаем это ДО брони A, пока коннектор ещё свободен.
+#  1. A бронирует коннектор, Activate -> Booked.
+#  2. B открывает тот же коннектор, видит "Get in line", встаёт в очередь, Activate -> In line.
+#  3. A стартует реальную зарядку из брони, ждёт %, останавливает.
+#  4. B должен продвинуться -> получить свою бронь (Booked).
+#  5. Cleanup: B отменяет бронь.
+
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 49
-# Scenario: 1-й пользователь — бронирование, потом зарядка, 2 пользователя в очереди — продвижение по очереди
-# Notes: Same multi-user/multi-device constraint as item 48.
 
-- launchApp
+- runFlow:
+    label: "PRECONDITION: 1-ый может забронировать"
+    commands:
+      - runFlow:
+          file: ../charging/setup_short_charging_session.yaml
+
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 30000
+      - runFlow:
+          file: ../../subflows/auth/open_profile_menu.yaml
+      - scrollUntilVisible:
+          element: "Logout"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "Logout"
+
+- runFlow:
+    label: "PRECONDITION: 2-ой может встать в очередь/забронировать"
+    commands:
+      - runFlow:
+          file: ../charging/setup_short_charging_session.yaml
+          env:
+            EMAIL: "${LERAKAB5_EMAIL}"
+            PASSWORD: "${PASSWORD}"
+
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 30000
+      - runFlow:
+          file: ../../subflows/auth/open_profile_menu.yaml
+      - scrollUntilVisible:
+          element: "Logout"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "Logout"
+
+- runFlow:
+    label: "ШАГ 1: A бронирует коннектор"
+    commands:
+      - runFlow:
+          file: ../../subflows/auth/login.yaml
+
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 30000
+      - waitForAnimationToEnd:
+          timeout: 5000
+      - retry:
+          maxRetries: 3
+          commands:
+            - extendedWaitUntil:
+                visible: ".*List.*"
+                timeout: 15000
+            - tapOn:
+                text: ".*List.*"
+            - extendedWaitUntil:
+                visible: ".*Гипермаркет Green.*"
+                timeout: 15000
+      - tapOn:
+          text: ".*Гипермаркет Green.*"
+      - extendedWaitUntil:
+          visible: ".*CCS2.*"
+          timeout: 10000
+      - tapOn:
+          text: ".*CCS2.*"
+      - extendedWaitUntil:
+          visible: "Next"
+          timeout: 10000
+
+      - runFlow:
+          file: ../charging/swipe_to_start_charging_mode.yaml
+      - assertVisible: ".*Full tank.*"
+
+      - runFlow:
+          file: ../charging/swipe_charging_mode_forward.yaml
+      - runFlow:
+          file: ../charging/swipe_charging_mode_forward.yaml
+      - runFlow:
+          file: ../charging/swipe_charging_mode_forward.yaml
+      - assertVisible: ".*Book.*"
+
+      - tapOn:
+          text: "Next"
+
+      - assertVisible: "Booking"
+      - assertVisible: "Mode"
+      - assertVisible:
+          text: "Booking"
+          index: 1
+
+      - tapOn: "Activate"
+
+      - assertVisible: "\\d{1,2}:\\d{2}\nBooked"
+
+      - runFlow:
+          file: ../../subflows/auth/open_profile_menu.yaml
+      - scrollUntilVisible:
+          element: "Logout"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "Logout"
+
+- runFlow:
+    label: "ШАГ 2: B открывает тот же коннектор -> встаёт в очередь"
+    commands:
+      - runFlow:
+          file: ../../subflows/auth/login.yaml
+          env:
+            EMAIL: "${LERAKAB5_EMAIL}"
+            PASSWORD: "${PASSWORD}"
+
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 30000
+      - waitForAnimationToEnd:
+          timeout: 5000
+      - retry:
+          maxRetries: 3
+          commands:
+            - extendedWaitUntil:
+                visible: ".*List.*"
+                timeout: 15000
+            - tapOn:
+                text: ".*List.*"
+            - extendedWaitUntil:
+                visible: ".*Гипермаркет Green.*"
+                timeout: 15000
+      - tapOn:
+          text: ".*Гипермаркет Green.*"
+      - assertVisible: "Reserved"
+      - extendedWaitUntil:
+          visible: ".*CCS2.*"
+          timeout: 10000
+      - tapOn:
+          text: ".*CCS2.*"
+      - extendedWaitUntil:
+          visible: "Next"
+          timeout: 10000
+
+      - assertVisible: "Get in line\nThe selected charging station is busy. You can get in line"
+
+      - tapOn:
+          text: "Next"
+
+      - assertVisible: "Booking"
+      - assertVisible: "Mode"
+      - assertVisible: "Queuing"
+
+      - tapOn: "Activate"
+
+      - assertVisible: "In line 1 machine"
+
+      - runFlow:
+          file: ../../subflows/auth/open_profile_menu.yaml
+      - scrollUntilVisible:
+          element: "Logout"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "Logout"
+
+- runFlow:
+    label: "ШАГ 3: A стартует реальную зарядку из брони, потом останавливает"
+    commands:
+      - runFlow:
+          file: ../../subflows/auth/login.yaml
+
+      - tapOn: "\\d{1,2}:\\d{2}\nBooked"
+      - tapOn: "Start charging"
+      - tapOn: "Next"
+      - tapOn: "Pay and charge"
+
+      - assertNotVisible: "Pay and charge"
+
+      - extendedWaitUntil:
+          visible: ".*33.*%"
+          timeout: 300000
+
+      - extendedWaitUntil:
+          visible: ".*Stop.*"
+          timeout: 10000
+      - tapOn:
+          text: ".*Stop.*"
+      - extendedWaitUntil:
+          visible: ".*Yes.*"
+          timeout: 10000
+      - tapOn:
+          text: ".*Yes.*"
+      - assertNotVisible: ".*Stop.*"
+
+      - extendedWaitUntil:
+          visible: 'Completed in \d{1,2}:\d{2}'
+          timeout: 60000
+
+      - extendedWaitUntil:
+          notVisible: " ✅ ️ Completed"
+          timeout: 120000
+
+      - tapOn: "Back"
+
+      - runFlow:
+          file: ../../subflows/auth/open_profile_menu.yaml
+      - scrollUntilVisible:
+          element: "Logout"
+          direction: DOWN
+          timeout: 10000
+      - tapOn: "Logout"
+
+- runFlow:
+    label: "ШАГ 4: B должен продвинуться в очереди -> получить бронь"
+    commands:
+      - runFlow:
+          file: ../../subflows/auth/login.yaml
+          env:
+            EMAIL: "${LERAKAB5_EMAIL}"
+            PASSWORD: "${PASSWORD}"
+
+      - extendedWaitUntil:
+          visible: "\\d{1,2}:\\d{2}\nBooked"
+          timeout: 30000
+
+- runFlow:
+    label: "ШАГ 5: Cleanup — B отменяет бронь"
+    commands:
+      - tapOn: "\\d{1,2}:\\d{2}\nBooked"
+      - tapOn: "Cancel"
+      - tapOn: "Cancel booking"
+      - assertNotVisible: "\\d{1,2}:\\d{2}\nBooked"

@@ -7,3 +7,5 @@
 --help.zip
 hierarchy.txt
 .maestro/
+.env
+.docs/

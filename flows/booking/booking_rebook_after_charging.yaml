@@ -1,8 +1,0 @@
-appId: by.batteryfly.ev_charging.dev
----
-# Regression test placeholder — not yet implemented
-# ID: 47
-# Scenario: Повторное бронирование доступно после выполнения зарядки
-# Notes: Depends on completing a full charging session first (sequential dependency on charging module).
-
-- launchApp

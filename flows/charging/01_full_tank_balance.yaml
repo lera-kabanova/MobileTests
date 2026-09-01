@@ -3,7 +3,7 @@ appId: by.batteryfly.ev_charging.dev
 # Полный бак с баланса. Ручная остановка
 
 - runFlow:
-    file: ../auth/login.yaml
+    file: ../../subflows/auth/login.yaml
 - extendedWaitUntil:
     visible: ".*List.*"
     timeout: 30000
@@ -27,6 +27,9 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
 
 - runFlow:
     file: swipe_to_start_charging_mode.yaml
@@ -34,7 +37,7 @@ appId: by.batteryfly.ev_charging.dev
 
 - runFlow:
     file: swipe_payment_to_start.yaml
-
+- assertVisible: ".*My balance.*"
 
 - tapOn:
     text: "Next"
@@ -43,6 +46,7 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: "Pay and charge"
+- assertNotVisible: "Pay and charge"
 
 - extendedWaitUntil:
     visible: ".*40.*%"
@@ -58,8 +62,8 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: ".*Yes.*"
+- assertNotVisible: ".*Stop.*"
 
 - extendedWaitUntil:
-    visible: "Ждем одну минуту..."
+    visible: 'Completed in \d{1,2}:\d{2}'
     timeout: 60000
-    optional: true

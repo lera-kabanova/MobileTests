@@ -1,8 +1,14 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 22
-# Scenario: Корректное отображение формы "История заправок" — пустой грид
-# Notes: Split per user instructions; needs an account with zero charging history.
+# "История заправок" — пустой грид
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+    env:
+      EMAIL: "${EMPTY_HISTORY_TEST_EMAIL}"
+      PASSWORD: "${PASSWORD}"
+
+- tapOn: "lera\nWelcome"
+- tapOn: "Charging history"
+
+- assertVisible: ".*[Nn]o.*charging.*history.*yet.*"

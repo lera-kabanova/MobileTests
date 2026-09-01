@@ -1,8 +1,29 @@
+# Корректное отображение формы "Charging history"
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 21
-# Scenario: Корректное отображение формы "История заправок"
-# Notes: Needs an account with existing charging history records.
+- runFlow:
+    file: ../../subflows/auth/login.yaml
 
-- launchApp
+- tapOn: "lera\nWelcome"
+- tapOn: "Charging history"
+
+- assertVisible: "Charging history"
+
+- assertVisible: "30 days"
+- assertVisible: "3 months"
+- assertVisible: "6 months"
+- assertVisible: "Year"
+
+- assertVisible: "Analytics\nTab 1 of 2"
+- assertVisible: "Transactions\nTab 2 of 2"
+
+- assertVisible: "Total"
+- assertVisible: "Amount"
+- assertVisible: "Charging time"
+- assertVisible: "Charging power"
+
+- assertVisible: '\d+\.\d{2} BYN'
+- assertVisible: '\d+(\.\d+)? kWh'
+- assertVisible: '\d+(\.\d+)? kW \(avg\)'
+- assertVisible: ".*Amount, kWh.*"

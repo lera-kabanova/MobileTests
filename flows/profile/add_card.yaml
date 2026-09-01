@@ -1,7 +1,9 @@
+# Привязка и удаление карты 
 appId: by.batteryfly.ev_charging.dev
 ---
-- launchApp:
-    stopApp: true
+
+- runFlow:
+    file: ../../subflows/auth/login.yaml
 
 - tapOn: "lera\nWelcome"
 
@@ -11,29 +13,88 @@ appId: by.batteryfly.ev_charging.dev
 
 - extendedWaitUntil:
     visible: "Номер карты"
-    timeout: 60000
+    timeout: 3000000
 
 - tapOn: "Номер карты"
 - inputText: "4200000000000000"
-- tapOn:
-    point: 0%,15%
+- hideKeyboard
 
-- tapOn:
-    point: 5%,66%
-
+- tapOn: "Срок действия"
 - inputText: "12/30"
-- tapOn:
-    point: 0%,15%
+- hideKeyboard
 
-- tapOn:
-    point: 53%,66%
 
+- tapOn: "CVC"
 - inputText: "123"
-- tapOn:
-    point: 0%,15%
+- hideKeyboard
+
+- tapOn: "Имя и фамилия на карте"
+- inputText: "asd asd"
+- hideKeyboard
+
 - tapOn: "Привязать карту"
 
-- tapOn:
-    point: 5%,78%
+- extendedWaitUntil:
+    visible: ".*Одобрено"
+    timeout: 60000
 
+- tapOn: "Вернуться в магазин"
+
+- assertVisible: "Bank card"
+- assertVisible: "•••• 0000"
+
+# отмена удаление карты
+- tapOn:
+    point: 79%,51%
+
+- assertVisible: "Would you like to delete your payment card?"
+
+- tapOn: "Cancel"
+
+- assertVisible: "Bank card"
+- assertVisible: "•••• 0000"
+
+# удаление карты
+- tapOn:
+    point: 79%,51%
+
+- assertVisible: "Would you like to delete your payment card?"
+
+- tapOn: "Yes"
+
+- assertVisible: "Add a card for payment"
+
+# привязка если нет ни одной привязанной карты
+- tapOn: "Add a card for payment"
+
+- extendedWaitUntil:
+    visible: "Номер карты"
+    timeout: 1200000
+
+- tapOn: "Номер карты"
+- inputText: "4200000000000000"
+- hideKeyboard
+
+- tapOn: "Срок действия"
+- inputText: "12/30"
+- hideKeyboard
+
+
+- tapOn: "CVC"
+- inputText: "123"
+- hideKeyboard
+
+- tapOn: "Имя и фамилия на карте"
 - inputText: "asd asd"
+- hideKeyboard
+
+- tapOn: "Привязать карту"
+
+- extendedWaitUntil:
+    visible: ".*Одобрено"
+    timeout: 60000
+
+- tapOn: "Вернуться в магазин"
+
+- assertVisible: "Bank card"
+- assertVisible: "•••• 0000"

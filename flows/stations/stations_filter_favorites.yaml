@@ -1,8 +1,23 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 17
-# Scenario: "Избранные станции" в фильтре на карте и в списке
-# Notes: Covers both map and list views in one file; note overlap with item 31 (charging module).
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn:
+    point: 84%,58%
+
+- tapOn: ".*[Ff]avorite.*" # TODO: реальный текст/id чипа "Избранные"
+
+# Список: должны остаться только станции, отмеченные "избранное"
+- tapOn:
+    text: ".*List.*"
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
+    text: ".*[Ff]avorite.*" # TODO: реальный признак "избранная станция" в карточке
+    index: 0
+
+# Карта: должны остаться только пины избранных станций
+# TODO: как проверить состав пинов на карте — стабильных локаторов может не быть,
+# возможно потребуется assertWithAI по скриншоту

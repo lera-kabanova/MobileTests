@@ -1,8 +1,69 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 2
-# Scenario: Регистрация пользователя через email
-# Notes: Needs a fresh/unused email as test data each run.
+- runScript:
+    file: ../../scripts/generate_unique_email.js
 
-- launchApp
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+- tapOn: "Register"
+
+- tapOn:
+    id: "email"
+- back
+- tapOn:
+    id: "email"
+- inputText: "${output.newEmail}"
+
+- hideKeyboard
+- tapOn:
+    id: "password"
+- inputText: "${PASSWORD}"
+
+- hideKeyboard
+
+- tapOn: "Continue registration"
+
+- tapOn:
+    id: "firstName"
+- inputText: "lera"
+- hideKeyboard
+
+- tapOn: "+"
+- inputText: "${VALID_PHONE}"
+- hideKeyboard
+
+- tapOn:
+    point: 84%,61%
+- tapOn:
+    point: 84%,65%
+
+- tapOn: "Continue registration"
+
+- assertVisible: "Confirm \nphone number"
+- assertVisible: "Didn't get the code? "
+- assertVisible: "Enter the 4-digit code from the SMS"
+- assertVisible: "Change account "
+
+- tapOn:
+    point: 4%,44%
+- inputText: "0000"
+- hideKeyboard
+
+# Финальная проверка теста — экран ввода OTP-кода появился (assertVisible выше). Реальный вход
+# под новым пользователем не проверяется: нет доступа к настоящему SMS-коду, присланному на
+# ${VALID_PHONE}, поэтому дальше сценарий не идёт.

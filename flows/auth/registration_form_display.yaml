@@ -1,8 +1,32 @@
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 1
-# Scenario: Корректное отображение формы "Регистрация"
-# Notes: UI-only, no backend dependency.
 
-- launchApp
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+
+- tapOn: "Register"
+- assertVisible: "Let's register!"
+- assertVisible: "First register,\nand then charge"
+
+- assertVisible:
+    point: 4%,40%
+
+- assertVisible:
+    point: 4%,50%
+

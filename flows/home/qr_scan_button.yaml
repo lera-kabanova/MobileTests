@@ -1,8 +1,40 @@
+
+# Функциональность кнопки "Отсканируйте QR код"
+#
+# ЗАМЕТКА: не получается стабильно нажать на кнопку по координатам (point) ниже — вероятно,
+# нужны реальные id/text локаторы вместо point, координаты не гарантируют попадание на элемент
+# на разных экранах/разрешениях.
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 13
-# Scenario: Функциональность кнопки "Отсканируйте QR код"
-# Notes: May require camera permission handling on emulator/device.
 
-- launchApp
+- launchApp:
+    permissions: 
+        camera: allow
+
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+
+- assertVisible:
+    point: 28%,22%
+- tapOn:
+    point: 28%,22%
+
+
+- assertVisible: "Scan the QR code"
+
+- tapOn:
+    point: 0%,4%
+
+- tapOn:
+    point: 87%,6%
+
+- assertVisible:
+    point: 28%,22%
+
+
+
+
+
+

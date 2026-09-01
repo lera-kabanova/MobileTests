@@ -1,8 +1,20 @@
+# Функциональность кнопки "Профиль"
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 20
-# Scenario: Функциональность кнопки "Профиль"
-# Notes: UI-only, requires being logged in.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: "lera\nWelcome"
+
+- assertVisible: "Profile"
+- assertVisible: "lera"
+
+
+
+
+
+
+
+

@@ -1,8 +1,31 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 16
-# Scenario: Недоступные станции в конце списка
-# Notes: Needs at least one unavailable and one available station in test data.
+- runFlow:
+    file: ../../subflows/auth/login.yaml
 
-- launchApp
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- tapOn:
+    text: ".*List.*"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+
+- assertVisible: ".*\n# .*\n.*\n.*\n.*kW"
+
+- assertVisible:
+    text: ".*\n# .*\n.*\n.*km\n.*kW"
+    index: 0
+
+- scrollUntilVisible:
+    element: ".*Unavailable.*"
+    direction: DOWN
+    timeout: 10000
+- assertVisible:
+    text: ".*\n# .*\n.*\nUnavailable\n.*kW"
+
+- assertNotVisible:
+    text: ".*\n# .*\n.*\n.*km\n.*kW"
+    below:
+      text: ".*Unavailable.*"

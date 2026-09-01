@@ -1,8 +1,13 @@
+# Корректное отображение формы "Язык"
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 25
-# Scenario: Корректное отображение формы "Язык"
-# Notes: UI-only display check.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: "lera\nWelcome"
+
+# ЗАМЕТКА: дальше не получается стабильно нажать на пункт меню "Язык" по координатам (point) —
+# нужен реальный id/text локатор пункта меню вместо point.
+# TODO: заменить на реальный локатор и добавить assertVisible на саму форму "Язык"

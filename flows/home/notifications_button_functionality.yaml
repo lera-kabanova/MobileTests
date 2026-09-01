@@ -1,8 +1,13 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 12a
-# Scenario: Функциональность кнопки "Уведомления" (новый дизайн)
-# Notes: Split from source item 12, which combined 2 checks (button/design + empty state).
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn:
+    point: 87%,6%
+
+- assertVisible: "Notifications"
+
+
+

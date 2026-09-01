@@ -1,8 +1,0 @@
-appId: by.batteryfly.ev_charging.dev
----
-# Regression test placeholder — not yet implemented
-# ID: 5
-# Scenario: OTP
-# Notes: Broad item in source list; may need SMS/code retrieval and could later split into correct/incorrect/resend cases.
-
-- launchApp

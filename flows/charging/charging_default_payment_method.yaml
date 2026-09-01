@@ -1,8 +1,39 @@
+# Отображение по умолчанию предыдущего способа оплаты
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 34
-# Scenario: Отображать по умолчанию предыдущий способ оплаты
-# Notes: Needs an account with a prior payment already made.
+- runFlow:
+    file: 04_80_percent_card.yaml
 
-- launchApp
+- tapOn: "Cool"
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
+
+- extendedWaitUntil:
+    visible: '(My balance|•••• \d{4})'
+    timeout: 15000
+

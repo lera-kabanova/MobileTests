@@ -1,8 +1,48 @@
+# Функциональность кнопки "Проложить маршрут" со станции
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 32
-# Scenario: Проложить маршрут (charging context)
-# Notes: Note overlap with item 19 and item 46 — same "Проложить маршрут" feature tested in 3 different screens.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+
+- tapOn: "Set a route"
+
+- assertVisible: "Select navigator"
+
+- tapOn: "Google Maps"
+
+- extendedWaitUntil:
+    visible: "Share"
+    timeout: 15000
+- tapOn: "Share"
+- extendedWaitUntil:
+    visible:
+      id: "android:id/content_preview_text"
+      text: "https://goo\\.gl/maps.*"
+    timeout: 15000
+- assertVisible:
+    id: "android:id/content_preview_text"
+    text: "https://goo\\.gl/maps.*"
+
+
+

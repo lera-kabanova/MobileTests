@@ -1,8 +1,78 @@
+# Функциональность кнопки "Проложить маршрут" (бронирование)
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 46
-# Scenario: Бронирование — функциональность кнопки "Проложить маршрут"
-# Notes: Note overlap with item 19 and item 32.
+# ЧЕРНОВИК: собран по аналогии с booking_reserve_specific_connector.yaml (шаги до брони)
+# и charging_route_button.yaml / stations_route_button.yaml (проверка самой кнопки маршрута).
+# Note overlap with item 19 and item 32 — часть шагов может дублироваться с этими тестами, при желании вынести в subflow.
 
-- launchApp
+- runFlow:
+    file: ../charging/setup_short_charging_session.yaml
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
+
+- runFlow:
+    file: ../charging/swipe_to_start_charging_mode.yaml
+- assertVisible: ".*Full tank.*"
+
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- assertVisible: ".*Book.*"
+
+- tapOn:
+    text: "Next"
+
+- assertVisible: "Booking"
+- tapOn: "Activate"
+
+- assertVisible: "\\d{1,2}:\\d{2}\nBooked"
+
+- tapOn: "Set a route"
+- assertVisible: "Select navigator"
+- tapOn: "Google Maps"
+
+- extendedWaitUntil:
+    visible: "Share"
+    timeout: 15000
+- tapOn: "Share"
+- extendedWaitUntil:
+    visible:
+      id: "android:id/content_preview_text"
+      text: "https://(goo\\.gl/maps|maps\\.app\\.goo\\.gl)/.+"
+    timeout: 15000
+- assertVisible:
+    id: "android:id/content_preview_text"
+    text: "https://(goo\\.gl/maps|maps\\.app\\.goo\\.gl)/.+"
+- assertVisible: ".*Charging station.*"
+
+- tapOn: "Cancel"
+- tapOn: "Cancel booking"
+- assertNotVisible: "\\d{1,2}:\\d{2}\nBooked"

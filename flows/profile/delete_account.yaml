@@ -1,8 +1,82 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 30
-# Scenario: Функциональность кнопки "Удалить аккаунт"
-# Notes: Destructive/irreversible; must run only against a disposable test account.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: "lera\nWelcome"
+- tapOn:
+    point: 13%,20%
+
+- tapOn: "Delete account"
+
+- tapOn: "Delete"
+
+- assertVisible: "Login"
+
+- tapOn: "Home"
+
+- launchApp:
+    appId: "com.android.chrome"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    id: "com.android.chrome:id/url_bar"
+- inputText: "admin.batteryfly.io"
+- pressKey: "Enter"
+
+
+# Если "Л" уже видно — админка помнит прошлую сессию, логиниться повторно не нужно.
+# Если не видно — логинимся.
+- runFlow:
+    when:
+      notVisible: "Л"
+    commands:
+      - tapOn:
+          id: "username"
+      - back
+      - tapOn:
+          id: "username"
+      - inputText: "${ADMIN_EMAIL}"
+      - hideKeyboard
+      - tapOn:
+          id: "password"
+      - inputText: "${PASSWORD}"
+      - hideKeyboard
+      - tapOn:
+          text: "Login"
+          index: 1
+
+
+- tapOn:
+    point: 3%,13%
+
+- tapOn: "Пользователи"
+
+- tapOn:
+    point: 46%,36%
+
+- inputText: "1227509@gmail.com"
+- hideKeyboard
+- tapOn:
+    point: 10%,50%
+
+# Скроллим вправо, пока не увидим статус "Заблокирован" — руками через swipe, а не через
+# scrollUntilVisible, потому что у scrollUntilVisible нет параметра для точки начала свайпа
+# (он всегда свайпает строго от центра экрана к краю). Тут свайп идёт на Y=50%, в той же области,
+# где tapOn: point: 10%,50% выше.
+- repeat:
+    while:
+      notVisible: "Заблокирован"
+    commands:
+      - swipe:
+          start: 90%, 50%
+          end: 10%, 50%
+          duration: 400
+- assertVisible: "Заблокирован"
+
+- tapOn:
+    point: 68%,52%
+
+- tapOn: "Разблокировать"

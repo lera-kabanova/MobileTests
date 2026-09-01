@@ -1,8 +1,49 @@
+# Пополнить баланс, если карта привязана
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 27
-# Scenario: Пополнить баланс, если карта привязана
-# Notes: Depends on a card already being linked (see add_card.yaml).
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: "lera\nWelcome"
+
+- tapOn: ".*My balance.*"
+
+- assertVisible: "Bank card"
+- assertVisible: '•••• \d{4}'
+
+- copyTextFrom:
+    text: '\d+\.\d{2} BYN'
+- evalScript: ${output.balanceBefore = parseFloat(maestro.copiedText.match(/[\d.]+/)[0])}
+
+- assertVisible: "Top up"
+- tapOn: "Top up"
+
+- assertVisible: "0.50"
+- tapOn: "0.50"
+
+- tapOn: "Backspace"
+- tapOn: "Backspace"
+- tapOn: "Backspace"
+- tapOn: "Backspace"
+
+- inputText: "3"
+- hideKeyboard
+
+- tapOn: '•••• \d{4}'
+
+- assertVisible: "Top up"
+- tapOn: "Top up"
+
+- copyTextFrom:
+    text: '\d+\.\d{2} BYN'
+- evalScript: ${output.balanceAfter = parseFloat(maestro.copiedText.match(/[\d.]+/)[0])}
+- assertTrue:
+    condition: ${Math.abs(output.balanceAfter - (output.balanceBefore + 3)) < 0.01}
+    label: "balanceBefore=${output.balanceBefore} balanceAfter=${output.balanceAfter}"
+
+- tapOn: "Transaction history"
+- assertVisible:
+    text: "Balance\n3 BYN\n.*"
+    index: 0
+

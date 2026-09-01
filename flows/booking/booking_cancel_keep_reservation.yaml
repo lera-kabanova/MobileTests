@@ -1,8 +1,0 @@
-appId: by.batteryfly.ev_charging.dev
----
-# Regression test placeholder — not yet implemented
-# ID: 45
-# Scenario: Отмена бронирования — сохранить бронь
-# Notes: Independent once a booking exists as precondition.
-
-- launchApp

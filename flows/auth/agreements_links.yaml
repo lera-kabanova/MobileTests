@@ -1,8 +1,63 @@
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 6
-# Scenario: Ссылки на пользовательские соглашения
-# Notes: UI-only, likely opens external links/WebView.
 
-- launchApp
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+- tapOn: "Register"
+
+- tapOn:
+    id: "email"
+- back
+- tapOn:
+    id: "email"
+- inputText: "${EMAIL}"
+
+
+- hideKeyboard
+- tapOn:
+    id: "password"
+- inputText: "${PASSWORD}"
+
+- hideKeyboard
+
+- tapOn: "Continue registration"
+ 
+- tapOn:
+    id: "firstName"
+- inputText: "Lera"
+- hideKeyboard
+
+- tapOn: "+"
+- inputText: "${VALID_PHONE}"
+- hideKeyboard
+
+- assertVisible: "Agree to the terms of "
+- assertVisible:
+    point: 84%,61%
+- tapOn:
+    point: 84%,61%
+
+- assertVisible: "I agree to the terms of "
+- assertVisible:
+    point: 84%,65%
+- tapOn:
+    point: 84%,65%
+
+
+

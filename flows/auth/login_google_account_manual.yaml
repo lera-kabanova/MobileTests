@@ -1,0 +1,43 @@
+appId: by.batteryfly.ev_charging.dev
+---
+- stopApp: "com.android.chrome"
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+- tapOn: "login?client_id=api-mobile2&tab_id=vt1lv0XS7yk&client_data=eyJydSI6ImJmbW9iaWxlOi8vbG9naW4tY2FsbGJhY2siLCJydCI6ImNvZGUiLCJzdCI6ImU3emptcml4d0haQTBuaVdENXBUamcifQ&session_code=KY8tu7TwC76SdQWqGpffwdnT2Wb8-SCez6cLfaei6G0"
+
+- tapOn: "Use another account"
+
+
+
+
+- tapOn:
+    id: "identifierId"
+    optional: true
+- inputText: "${GOOGLE_TEST_EMAIL}"
+- tapOn: "Next"
+
+- extendedWaitUntil:
+    visible: ".*[Pp]assword.*"
+    timeout: 10000
+- inputText: "${GOOGLE_TEST_PASSWORD}"
+- tapOn: "Next"
+
+
+
+- extendedWaitUntil:
+    visible: "lera\nWelcome"
+    timeout: 20000
+- assertVisible: "lera\nWelcome"

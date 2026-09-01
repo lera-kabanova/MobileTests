@@ -1,8 +1,115 @@
+# Окончание бронирования — исчезновение плашки и изменение статуса коннектора
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 43
-# Scenario: Окончание бронирования — исчезновение плашки и изменение статуса коннектора
-# Notes: Timing-dependent; requires waiting out a real reservation window or backend time control.
+- runFlow:
+    file: ../charging/setup_short_charging_session.yaml
 
-- launchApp
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
+
+- runFlow:
+    file: ../charging/swipe_to_start_charging_mode.yaml
+- assertVisible: ".*Full tank.*"
+
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- runFlow:
+    file: ../charging/swipe_charging_mode_forward.yaml
+- assertVisible: ".*Book.*"
+
+- tapOn:
+    text: "Next"
+
+- assertVisible: "Booking"
+- assertVisible: "Mode"
+- assertVisible:
+    text: "Booking"
+    index: 1
+
+- tapOn: "Activate"
+
+- assertVisible: "\\d{1,2}:\\d{2}\nBooked"
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: ".*Reserved*"
+    timeout: 10000
+
+- tapOn: "Back"
+
+- extendedWaitUntil:
+    notVisible: "\\d{1,2}:\\d{2}\nBooked"
+    timeout: 960000
+
+- assertNotVisible: "\\d{1,2}:\\d{2}\nBooked"
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- extendedWaitUntil:
+    visible: ".*Available*"
+    timeout: 10000

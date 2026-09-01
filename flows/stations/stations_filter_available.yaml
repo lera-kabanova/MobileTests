@@ -1,8 +1,19 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 18
-# Scenario: "Свободно" в фильтре на карте и в списке
-# Notes: Covers both map and list views in one file.
+# ЧЕРНОВИК: фильтр "Свободно" — карта + список
+# Локаторы ниже — заглушки (TODO), нужно свериться с реальным экраном (иконка/кнопка фильтра,
+# текст чипа "Свободно", признак недоступности станции в карточке).
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- tapOn: ".*[Ff]ilter.*" # TODO: реальный локатор кнопки/иконки фильтров
+- tapOn: ".*[Aa]vailable.*" # TODO: реальный текст/id чипа "Свободно"
+
+- tapOn:
+    text: ".*List.*"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# После фильтра в списке не должно остаться недоступных станций
+- assertNotVisible: ".*[Uu]navailable.*" # TODO: реальный текст/бейдж недоступности

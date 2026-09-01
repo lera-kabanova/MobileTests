@@ -1,8 +1,6 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-
 - stopApp: "com.android.chrome"
-
 - launchApp:
     clearState: true
 
@@ -18,24 +16,12 @@ appId: by.batteryfly.ev_charging.dev
     visible: "Welcome back!"
     timeout: 15000
 
+- tapOn: ".*Google.*"
 
-- tapOn:
-    id: "username"
-- back
-- tapOn:
-    id: "username"
-- inputText: "${EMAIL}"
-
-
-- hideKeyboard
-- tapOn:
-    id: "password"
-- inputText: "${PASSWORD}"
-
-- hideKeyboard
-
-- tapOn:
-    text: "Login"
-    index: 1
+# TODO: подтвердить реальный текст/локатор подсказанного аккаунта в пикере
+- extendedWaitUntil:
+    visible: "${GOOGLE_TEST_EMAIL}"
+    timeout: 15000
+- tapOn: "${GOOGLE_TEST_EMAIL}"
 
 - assertVisible: "lera\nWelcome"

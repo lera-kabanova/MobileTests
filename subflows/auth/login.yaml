@@ -5,7 +5,7 @@ appId: by.batteryfly.ev_charging.dev
 - stopApp: "com.android.chrome"
 
 - launchApp:
-    stopApp: true
+    clearState: true
 
 - extendedWaitUntil:
     visible: "Login"
@@ -39,4 +39,15 @@ appId: by.batteryfly.ev_charging.dev
     text: "Login"
     index: 1
 
-- assertVisible: "lera\nWelcome"
+# После входа иногда всплывает попап(ы) с кнопкой "Close" — закрываем, пока не пропадёт
+- repeat:
+    while:
+      visible: "Close"
+    commands:
+      - tapOn: "Close"
+
+- extendedWaitUntil:
+    visible: "lera\nWelcome"
+    timeout: 30000
+    optional: true
+

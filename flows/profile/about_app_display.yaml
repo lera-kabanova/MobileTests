@@ -1,8 +1,17 @@
+# Корректное отображение формы "О приложении"
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 26
-# Scenario: Корректное отображение формы "О приложении"
-# Notes: UI-only display check.
+- runFlow:
+    file: ../../subflows/auth/login.yaml
 
-- launchApp
+- tapOn: "lera\nWelcome"
+
+- tapOn: "About the app and help"
+
+- assertVisible: "About the app and help"
+- assertVisible: "For any app-related issues or questions, please reach out to our support team"
+- assertVisible: "Frequently asked questions"
+- assertVisible: "support@batteryfly.by"
+- assertVisible: "+37529 888-88-87"
+

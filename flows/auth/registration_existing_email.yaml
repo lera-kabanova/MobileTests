@@ -1,8 +1,59 @@
+
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 3
-# Scenario: Регистрация пользователя с существующим email
-# Notes: Negative case, needs one guaranteed pre-existing email.
 
-- launchApp
+- stopApp: "com.android.chrome"
+
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible: "Login"
+    timeout: 15000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- tapOn:
+    point: 93%, 9%
+- extendedWaitUntil:
+    visible: "Welcome back!"
+    timeout: 15000
+
+- tapOn: "Register"
+
+- tapOn:
+    id: "email"
+- back
+- tapOn:
+    id: "email"
+- inputText: "${EXISTING_EMAIL}"
+
+
+- hideKeyboard
+- tapOn:
+    id: "password"
+- inputText: "${PASSWORD}"
+
+- hideKeyboard
+
+- tapOn: "Continue registration"
+ 
+- tapOn:
+    id: "firstName"
+- inputText: "Lera"
+
+
+- hideKeyboard
+- tapOn: "+"
+- inputText: "${VALID_PHONE}"
+
+- hideKeyboard
+- tapOn:
+    point: 84%,61%
+- tapOn:
+    point: 84%,65%
+- tapOn: "Continue registration"
+
+- tapOn: "Let's register!"
+- tapOn: "Email already exists.The username is already taken."
+

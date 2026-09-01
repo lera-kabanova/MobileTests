@@ -1,0 +1,50 @@
+# выбор свободного коннектора на экране "Select a connector".
+
+appId: by.batteryfly.ev_charging.dev
+---
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- waitForAnimationToEnd:
+    timeout: 5000
+
+- extendedWaitUntil:
+    visible: "Available"
+    timeout: 5000
+    optional: true
+
+- runFlow:
+    when:
+      visible:
+        text: "Available"
+        childOf:
+          text: ".*CCS2.*"
+    commands:
+      - tapOn:
+          text: ".*CCS2.*"
+
+- runFlow:
+    when:
+      visible: "Select a connector"
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              text: "Available"
+              childOf:
+                text: ".*CCS2.*"
+            visible:
+              text: "Available"
+              childOf:
+                text: ".*NACS.*"
+          commands:
+            - tapOn:
+                text: ".*NACS.*"
+
+- runFlow:
+    when:
+      visible: "Select a connector"
+    commands:
+      - assertVisible:
+          text: "Available"
+          label: "Оба коннектора заняты (CCS2 и NACS) — нет свободного коннектора для теста"

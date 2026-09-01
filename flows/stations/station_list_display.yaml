@@ -1,8 +1,0 @@
-appId: by.batteryfly.ev_charging.dev
----
-# Regression test placeholder — not yet implemented
-# ID: 15
-# Scenario: Корректное отображение списка станций
-# Notes: Independent, needs stable seeded station data.
-
-- launchApp

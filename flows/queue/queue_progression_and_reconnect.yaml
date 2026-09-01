@@ -1,8 +1,94 @@
 appId: by.batteryfly.ev_charging.dev
 ---
-# Regression test placeholder — not yet implemented
-# ID: 48
-# Scenario: 1-й пользователь — зарядка, 2 пользователя в очереди — продвижение по очереди и рестарт/переподключение коннектора в течение 20 секунд
-# Notes: Needs 3 concurrent user sessions/devices and precise 20s timing; likely not automatable with a single Maestro device — needs multi-device orchestration strategy.
+# 1-й пользователь заряжается, 2 в очереди — продвижение по очереди и рестарт/переподключение
+# коннектора в течение 20 секунд.
+#
+# ЧЕРНОВИК / ОГРАНИЧЕНИЕ: Maestro-флоу выполняется на ОДНОМ устройстве, а сценарию нужно минимум 3
+# параллельные сессии (заряжающийся + 2 в очереди) плюс внешний триггер обрыва/переподключения
+# коннектора (админка/API/физически) в пределах 20 сек — этого один флоу сам не сделает.
+# Ниже — набросок "роли" через env-переменную ${ROLE}, чтобы один и тот же файл можно было
+# запустить параллельно на 3 устройствах с разными ролями: CHARGING | QUEUE_1 | QUEUE_2.
+# Все локаторы очереди — заглушки (TODO), реального экрана очереди я не видела.
 
-- launchApp
+- runFlow:
+    file: ../../subflows/auth/login.yaml
+
+- extendedWaitUntil:
+    visible: ".*List.*"
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 5000
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: ".*List.*"
+          timeout: 15000
+      - tapOn:
+          text: ".*List.*"
+      - extendedWaitUntil:
+          visible: ".*Гипермаркет Green.*"
+          timeout: 15000
+- tapOn:
+    text: ".*Гипермаркет Green.*"
+- extendedWaitUntil:
+    visible: ".*CCS2.*"
+    timeout: 10000
+- tapOn:
+    text: ".*CCS2.*"
+
+# --- Роль: пользователь, который заряжается ---
+- runFlow:
+    when:
+      true: ${ROLE == 'CHARGING'}
+    commands:
+      - extendedWaitUntil:
+          visible: "Next"
+          timeout: 10000
+      - runFlow:
+          file: ../charging/swipe_to_start_charging_mode.yaml
+      - runFlow:
+          file: ../charging/swipe_payment_to_start.yaml
+      - tapOn:
+          text: "Next"
+      - extendedWaitUntil:
+          visible: "Pay and charge"
+          timeout: 10000
+      - tapOn:
+          text: "Pay and charge"
+      # TODO: подтвердить реальный текст/статус "идёт зарядка"
+      - assertVisible: ".*Charging.*"
+
+# --- Роль: пользователи в очереди ---
+- runFlow:
+    when:
+      true: ${ROLE == 'QUEUE_1' || ROLE == 'QUEUE_2'}
+    commands:
+      # TODO: заменить на реальный текст/локатор экрана "вы в очереди"
+      - extendedWaitUntil:
+          visible: ".*[Qq]ueue.*"
+          timeout: 15000
+      # TODO: заменить на реальный локатор позиции в очереди
+      - assertVisible: ".*[Pp]osition.*"
+
+# --- Точка, где вручную/через API обрывается и переподключается коннектор (< 20 сек) ---
+# TODO: описать или автоматизировать этот шаг отдельно (не через Maestro-UI действия)
+
+# --- Проверка продвижения очереди после реконнекта ---
+- runFlow:
+    when:
+      true: ${ROLE == 'QUEUE_1'}
+    commands:
+      # TODO: QUEUE_1 должен продвинуться на первую позицию/получить доступ к коннектору
+      - extendedWaitUntil:
+          visible: ".*[Pp]osition.*1.*"
+          timeout: 20000
+
+- runFlow:
+    when:
+      true: ${ROLE == 'QUEUE_2'}
+    commands:
+      # TODO: QUEUE_2 должен продвинуться на одну позицию вперёд
+      - extendedWaitUntil:
+          visible: ".*[Pp]osition.*1.*"
+          timeout: 20000

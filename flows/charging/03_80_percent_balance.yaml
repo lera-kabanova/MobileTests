@@ -1,8 +1,8 @@
 appId: by.batteryfly.ev_charging.dev
 ---
 # 80% с баланса. Ручная остановка
-- launchApp:
-    stopApp: true
+- runFlow:
+    file: ../../subflows/auth/login.yaml
 - extendedWaitUntil:
     visible: ".*List.*"
     timeout: 30000
@@ -26,21 +26,21 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: ".*CCS2.*"
+- extendedWaitUntil:
+    visible: "Next"
+    timeout: 10000
 
 - runFlow:
     file: swipe_to_start_charging_mode.yaml
 - assertVisible: ".*Full tank.*"
 
-- runFlow: 
+- runFlow:
     file: swipe_charging_mode_forward.yaml
 - assertVisible: ".*Charge.*to.*80.*%.*"
 
 - runFlow:
     file: swipe_payment_to_start.yaml
 
-# BLOCKED: assertVisible ".*My balance.*" removed here — no payment method in the
-# carousel currently contains the text "My balance" on this (corporate) test account.
-# See report — pending correct test account credentials from the team.
 
 - tapOn:
     text: "Next"
@@ -49,6 +49,7 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: "Pay and charge"
+- assertNotVisible: "Pay and charge"
 
 - extendedWaitUntil:
     visible: ".*40.*%"
@@ -64,8 +65,8 @@ appId: by.batteryfly.ev_charging.dev
     timeout: 10000
 - tapOn:
     text: ".*Yes.*"
+- assertNotVisible: ".*Stop.*"
 
 - extendedWaitUntil:
-    visible: "Ждем одну минуту..."
+    visible: 'Completed in \d{1,2}:\d{2}'
     timeout: 60000
-    optional: true

@@ -1,6 +1,8 @@
 # Корректное отображение формы "Платежная информация"
 
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 
 - runFlow:

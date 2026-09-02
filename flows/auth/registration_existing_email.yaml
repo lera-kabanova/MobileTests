@@ -1,5 +1,7 @@
 
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 
 - stopApp: "com.android.chrome"

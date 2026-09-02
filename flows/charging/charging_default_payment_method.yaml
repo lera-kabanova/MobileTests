@@ -1,5 +1,7 @@
 # Отображение по умолчанию предыдущего способа оплаты
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 - runFlow:
     file: 04_80_percent_card.yaml

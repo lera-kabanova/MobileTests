@@ -1,6 +1,8 @@
 # Бронирование станции
 
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 - runFlow:
     file: ../charging/setup_short_charging_session.yaml

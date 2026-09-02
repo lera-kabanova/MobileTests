@@ -1,5 +1,7 @@
 # Привязка и удаление карты 
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 
 - runFlow:

@@ -1,4 +1,6 @@
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 # Зарядка водителем с корпоративного аккаунта
 

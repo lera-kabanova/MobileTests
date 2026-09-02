@@ -1,6 +1,8 @@
 # Функциональность кнопки "Профиль"
 
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 
 - runFlow:

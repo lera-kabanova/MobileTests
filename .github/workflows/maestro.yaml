@@ -1,11 +1,42 @@
 name: Android Emulator Test
 
+run-name: Android Emulator Test - ${{ inputs.module || 'scheduled/push run' }}
+
 on:
   workflow_dispatch:
+    inputs:
+      module:
+        description: 'Какой модуль гонять'
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - auth
+          - home
+          - stations
+          - profile
+          - charging
+          - booking
+          - queue
+          - corporate
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Nightly regression run at 03:00 UTC
+    - cron: '0 3 * * *'
+
+env:
+  # Pinned APK build under test. Bump this when a new build is cut — no automated
+  # "latest release" lookup on purpose, see knowledge/regression-structure.md conventions.
+  APK_RELEASE_URL: https://github.com/lera-kabanova/MobileTests/releases/download/v0.1/bf_stage.apk
 
 jobs:
   emulator-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -23,8 +54,19 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Start Android Emulator
+      - name: Start Android Emulator and run regression suite
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          CORPORATE_TEST_EMAIL: ${{ secrets.CORPORATE_TEST_EMAIL }}
+          CORPORATE_PASSWORD: ${{ secrets.CORPORATE_PASSWORD }}
+          EMPTY_HISTORY_TEST_EMAIL: ${{ secrets.EMPTY_HISTORY_TEST_EMAIL }}
+          EXISTING_EMAIL: ${{ secrets.EXISTING_EMAIL }}
+          INVALID_PASSWORD: ${{ secrets.INVALID_PASSWORD }}
+          NEW_PASSWORD: ${{ secrets.NEW_PASSWORD }}
+          UNREGISTER_EMAIL: ${{ secrets.UNREGISTER_EMAIL }}
+          VALID_PHONE: ${{ secrets.VALID_PHONE }}
         with:
           api-level: 34
           target: google_apis
@@ -41,7 +83,7 @@ jobs:
             adb devices
 
             echo "Downloading APK..."
-            wget -O bf-stage.apk "https://github.com/lera-kabanova/MobileTests/releases/download/v0.1/bf_stage.apk"
+            wget -O bf-stage.apk "$APK_RELEASE_URL"
 
             echo "Installing APK..."
             adb install -r bf-stage.apk
@@ -51,11 +93,38 @@ jobs:
 
             export PATH="/home/runner/.maestro/bin:$PATH"
 
-            echo "Checking Maestro binary..."
-            ls -la /home/runner/.maestro/bin
-            
             echo "Maestro version:"
             /home/runner/.maestro/bin/maestro --version
 
-            echo "Running charging test..."
-            /home/runner/.maestro/bin/maestro test flows/charging/01_full_tank_balance.yaml
+            case "${{ inputs.module }}" in
+              auth) FOLDER="flows/auth" ;;
+              home) FOLDER="flows/home" ;;
+              stations) FOLDER="flows/stations" ;;
+              profile) FOLDER="flows/profile" ;;
+              charging) FOLDER="flows/charging" ;;
+              booking) FOLDER="flows/booking" ;;
+              queue) FOLDER="flows/queue" ;;
+              corporate) FOLDER="flows/corporate" ;;
+              *) FOLDER="flows/" ;;
+            esac
+
+            echo "Running regression suite (folder: $FOLDER, tag: regression)..."
+            /home/runner/.maestro/bin/maestro test "$FOLDER" \
+              --include-tags=regression \
+              --format=JUNIT --output=maestro-report.xml \
+              --debug-output=maestro-debug \
+              -e EMAIL="$EMAIL" -e PASSWORD="$PASSWORD" \
+              -e CORPORATE_TEST_EMAIL="$CORPORATE_TEST_EMAIL" -e CORPORATE_PASSWORD="$CORPORATE_PASSWORD" \
+              -e EMPTY_HISTORY_TEST_EMAIL="$EMPTY_HISTORY_TEST_EMAIL" -e EXISTING_EMAIL="$EXISTING_EMAIL" \
+              -e INVALID_PASSWORD="$INVALID_PASSWORD" -e NEW_PASSWORD="$NEW_PASSWORD" \
+              -e UNREGISTER_EMAIL="$UNREGISTER_EMAIL" -e VALID_PHONE="$VALID_PHONE"
+
+      - name: Upload Maestro report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-report
+          path: |
+            maestro-report.xml
+            maestro-debug/**
+          if-no-files-found: ignore

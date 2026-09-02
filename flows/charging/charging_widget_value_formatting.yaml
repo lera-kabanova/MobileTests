@@ -1,5 +1,7 @@
 # Плашка "Идет зарядка" — % без дробной части, kW максимум 1 знак после запятой
 appId: by.batteryfly.ev_charging.dev
+tags:
+  - regression
 ---
 - runFlow:
     file: ../../subflows/auth/login.yaml

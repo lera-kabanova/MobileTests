@@ -31,7 +31,7 @@ on:
 env:
   # Pinned APK build under test. Bump this when a new build is cut — no automated
   # "latest release" lookup on purpose, see knowledge/regression-structure.md conventions.
-  APK_RELEASE_URL: https://github.com/lera-kabanova/MobileTests/releases/download/v0.1/bf_stage.apk
+  APK_RELEASE_URL: https://github.com/lera-kabanova/MobileTests/releases/download/v0.3/bf_stage.apk
 
 jobs:
   emulator-test:

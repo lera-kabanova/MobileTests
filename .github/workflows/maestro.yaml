@@ -96,28 +96,7 @@ jobs:
             echo "Maestro version:"
             /home/runner/.maestro/bin/maestro --version
 
-            case "${{ inputs.module }}" in
-              auth) FOLDER="flows/auth" ;;
-              home) FOLDER="flows/home" ;;
-              stations) FOLDER="flows/stations" ;;
-              profile) FOLDER="flows/profile" ;;
-              charging) FOLDER="flows/charging" ;;
-              booking) FOLDER="flows/booking" ;;
-              queue) FOLDER="flows/queue" ;;
-              corporate) FOLDER="flows/corporate" ;;
-              *) FOLDER="flows/" ;;
-            esac
-
-            echo "Running regression suite (folder: $FOLDER, tag: regression)..."
-            /home/runner/.maestro/bin/maestro test "$FOLDER" \
-              --include-tags=regression \
-              --format=JUNIT --output=maestro-report.xml \
-              --debug-output=maestro-debug \
-              -e EMAIL="$EMAIL" -e PASSWORD="$PASSWORD" \
-              -e CORPORATE_TEST_EMAIL="$CORPORATE_TEST_EMAIL" -e CORPORATE_PASSWORD="$CORPORATE_PASSWORD" \
-              -e EMPTY_HISTORY_TEST_EMAIL="$EMPTY_HISTORY_TEST_EMAIL" -e EXISTING_EMAIL="$EXISTING_EMAIL" \
-              -e INVALID_PASSWORD="$INVALID_PASSWORD" -e NEW_PASSWORD="$NEW_PASSWORD" \
-              -e UNREGISTER_EMAIL="$UNREGISTER_EMAIL" -e VALID_PHONE="$VALID_PHONE"
+            case "${{ inputs.module }}" in auth) FOLDER="flows/auth" ;; home) FOLDER="flows/home" ;; stations) FOLDER="flows/stations" ;; profile) FOLDER="flows/profile" ;; charging) FOLDER="flows/charging" ;; booking) FOLDER="flows/booking" ;; queue) FOLDER="flows/queue" ;; corporate) FOLDER="flows/corporate" ;; *) FOLDER="flows/" ;; esac; echo "Running regression suite (folder: $FOLDER, tag: regression)..."; /home/runner/.maestro/bin/maestro test "$FOLDER" --include-tags=regression --format=JUNIT --output=maestro-report.xml --debug-output=maestro-debug -e EMAIL="$EMAIL" -e PASSWORD="$PASSWORD" -e CORPORATE_TEST_EMAIL="$CORPORATE_TEST_EMAIL" -e CORPORATE_PASSWORD="$CORPORATE_PASSWORD" -e EMPTY_HISTORY_TEST_EMAIL="$EMPTY_HISTORY_TEST_EMAIL" -e EXISTING_EMAIL="$EXISTING_EMAIL" -e INVALID_PASSWORD="$INVALID_PASSWORD" -e NEW_PASSWORD="$NEW_PASSWORD" -e UNREGISTER_EMAIL="$UNREGISTER_EMAIL" -e VALID_PHONE="$VALID_PHONE"
 
       - name: Upload Maestro report
         if: always()
@@ -126,5 +105,6 @@ jobs:
           name: maestro-report
           path: |
             maestro-report.xml
-            maestro-debug/**
+            maestro-debug/.maestro/tests/**
           if-no-files-found: ignore
+          include-hidden-files: true

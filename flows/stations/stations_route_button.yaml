@@ -1,6 +1,7 @@
-# Функциональность кнопки "Проложить маршрут" с карты
 appId: by.batteryfly.ev_charging.dev
+---
+# Regression test placeholder — not yet implemented
+# ID: 19
+# Scenario: Функциональность кнопки "Проложить маршрут" с карты
 
-
-
-
+- launchApp

@@ -1,1 +1,1 @@
-output.newEmail = "test+" + Date.now() + "@example.com";
+output.newEmail = "test+" + Date.now() + "@gmail.com";

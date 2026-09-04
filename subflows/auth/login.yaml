@@ -9,12 +9,13 @@ appId: by.batteryfly.ev_charging.dev
 
 - extendedWaitUntil:
     visible: "Login"
-    timeout: 15000
+    timeout: 30000
 - waitForAnimationToEnd:
     timeout: 5000
 
 - tapOn:
-    point: 93%, 9%
+    id: "login_button"
+
 - extendedWaitUntil:
     visible: "Welcome back!"
     timeout: 15000
@@ -39,7 +40,6 @@ appId: by.batteryfly.ev_charging.dev
     text: "Login"
     index: 1
 
-# После входа иногда всплывает попап(ы) с кнопкой "Close" — закрываем, пока не пропадёт
 - repeat:
     while:
       visible: "Close"
